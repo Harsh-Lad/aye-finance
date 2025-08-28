@@ -152,6 +152,9 @@ dependencies:
   tailwind-merge:
     specifier: ^2.5.5
     version: 2.6.0
+  tailwind-scrollbar-hide:
+    specifier: ^4.0.0
+    version: 4.0.0(tailwindcss@4.1.12)
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@4.1.12)
@@ -2885,6 +2888,14 @@ packages:
 
   /tailwind-merge@2.6.0:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+    dev: false
+
+  /tailwind-scrollbar-hide@4.0.0(tailwindcss@4.1.12):
+    resolution: {integrity: sha512-gobtvVcThB2Dxhy0EeYSS1RKQJ5baDFkamkhwBvzvevwX6L4XQfpZ3me9s25Ss1ecFVT5jPYJ50n+7xTBJG9WQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 4.0.0 || >= 4.0.0-beta.8 || >= 4.0.0-alpha.20'
+    dependencies:
+      tailwindcss: 4.1.12
     dev: false
 
   /tailwindcss-animate@1.0.7(tailwindcss@4.1.12):
