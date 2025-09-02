@@ -60,13 +60,18 @@ export function Header() {
       )}
     >
       {/* Clean White Background */}
-      <div className="bg-white shadow-md border-b border-gray-200">
-        <div className="container mx-auto px-6 py-4">
+      <div
+        className={cn(
+          "bg-primary shadow-xl",
+          isMobileMenuOpen && "shadow-none transition-shadow"
+        )}
+      >
+        <div className="container mx-auto p-6">
           <div className="flex items-center justify-between">
             {/* Logo Section */}
             <Link href="/" className="flex items-center group">
               <Image
-                src="/Aye-Finance-LOGO.jpg"
+                src="/Aye-Finance-LOGO-WHITE.png"
                 alt="Aye Finance Logo"
                 width={140}
                 height={90}
@@ -81,10 +86,10 @@ export function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-gray-700 hover:text-primary font-medium text-sm transition-colors duration-200 relative group"
+                  className="text-gray-200 hover:text-white uppercase font-medium text-sm transition-colors duration-200 relative group"
                 >
                   {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               ))}
             </nav>
@@ -92,7 +97,7 @@ export function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-700 hover:text-primary hover:bg-gray-100 transition-all duration-300"
+              className="md:hidden p-2 rounded-lg text-gray-200 hover:text-white hover:bg-background/10 transition-all duration-300"
             >
               {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -105,7 +110,7 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+          <div className="md:hidden bg-primary shadow-xl">
             <div className="container mx-auto px-6 py-4">
               <nav className="space-y-2">
                 {navigationItems.map((item) => (
@@ -113,7 +118,7 @@ export function Header() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-4 py-3 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
+                    className="block px-4 py-3 text-gray-200 hover:text-white hover:bg-background/10 rounded-lg transition-all duration-200 font-medium"
                   >
                     {item.label}
                   </Link>

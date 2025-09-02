@@ -1,4 +1,4 @@
-import { DetailedTimelineSection } from "@/components/routes/our-story/detailed-timeline-section";
+import { HorizontalTimeline } from "@/components/routes/our-story/detailed-timeline-section";
 import { ScrollToTop } from "@/components/routes/our-story/scroll-to-top";
 import { StoryHeroSection } from "@/components/routes/our-story/story-hero-section";
 import { StoryTimelineSection } from "@/components/routes/our-story/story-timeline-section";
@@ -20,13 +20,11 @@ export const metadata: Metadata = {
 
 export default function OurStoryPage() {
   return (
-    <>
-      <main className="min-h-screen">
-        <StoryHeroSection />
-        <StoryTimelineSection />
-        <DetailedTimelineSection />
-      </main>
+    <main>
+      <StoryHeroSection />
+      <StoryTimelineSection />
+      <HorizontalTimeline />
       <ScrollToTop />
-    </>
+    </main>
   );
 }

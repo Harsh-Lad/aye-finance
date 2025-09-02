@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 
@@ -7,6 +8,7 @@ export const AyeFinTextOverlay = ({
 }: {
   onComplete: () => void;
 }) => {
+  const [visible, setVisible] = useState(true);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const [maskPosition, setMaskPosition] = useState({ cx: "50%", cy: "50%" });
@@ -26,8 +28,12 @@ export const AyeFinTextOverlay = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onComplete();
-    }, 5000);
+      setVisible(false);
+      // Small delay before calling onComplete to ensure smooth transition
+      setTimeout(() => {
+        onComplete();
+      }, 500);
+    }, 4000); // Reduced from 5000 to 4000 for better timing
 
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -35,9 +41,14 @@ export const AyeFinTextOverlay = ({
   return (
     <motion.div
       initial={{ opacity: 1 }}
+      animate={{ opacity: visible ? 1 : 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="absolute inset-0 z-10 flex items-center justify-center bg-black/20"
+      className={cn(
+        "absolute inset-0 z-10 flex items-center justify-center bg-transparent pointer-events-none",
+        !visible && "opacity-0"
+      )}
+      style={{ display: visible ? "flex" : "none" }}
     >
       <svg
         ref={svgRef}

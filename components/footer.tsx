@@ -1,15 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { FileText, Mail, MapPin, Phone } from "lucide-react";
-import Image from "next/image";
-
 export function Footer() {
   return (
     <footer className="border-t border-border">
-      <div className="container mx-auto px-6 py-12">
-        {/* Main Footer Content */}
+      {/* <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-          {/* Company Info */}
+         
           <div className="lg:col-span-1">
             <div className="mb-6 space-y-3">
               <Image
@@ -27,7 +21,7 @@ export function Footer() {
               </p>
             </div>
 
-            {/* Social Links */}
+            
             <div className="flex space-x-4">
               <Button
                 variant="outline"
@@ -71,7 +65,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Contact Information */}
+          
           <div className="lg:col-span-1">
             <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Phone className="w-5 h-5 text-primary" />
@@ -94,7 +88,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Office Locations */}
+          
           <div className="lg:col-span-1">
             <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-primary" />
@@ -118,7 +112,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Policies & Links */}
+          
           <div className="lg:col-span-1">
             <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-primary" />
@@ -159,14 +153,13 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Google Map Section */}
         <div className="mb-8">
           <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary" />
             Find Us
           </h4>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Registered Office Map */}
+            
             <div className="space-y-2">
               <h5 className="text-sm font-medium">
                 Registered Office - Karampura, West Delhi
@@ -185,7 +178,7 @@ export function Footer() {
               </div>
             </div>
 
-            {/* Corporate Office Map */}
+            
             <div className="space-y-2">
               <h5 className="text-sm font-medium">
                 Corporate Office - Sector 45, Gurugram
@@ -207,19 +200,18 @@ export function Footer() {
         </div>
 
         <Separator className="mb-6" />
-
-        {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-center md:text-left">
-            Copyright © 2025 Aye Finance. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4 text-xs">
-            <span>Regulated by RBI</span>
-            <span>•</span>
-            <span>NBFC License</span>
-            <span>•</span>
-            <span>ISO 27001 Certified</span>
-          </div>
+      </div> */}
+      {/* Bottom Footer */}
+      <div className="container mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-sm text-center md:text-left">
+          Copyright © 2025 Aye Finance. All rights reserved.
+        </p>
+        <div className="flex items-center gap-4 text-xs">
+          <span>Regulated by RBI</span>
+          <span>•</span>
+          <span>NBFC License</span>
+          <span>•</span>
+          <span>ISO 27001 Certified</span>
         </div>
       </div>
     </footer>

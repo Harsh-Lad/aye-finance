@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -38,125 +39,163 @@ export function StoryHeroSection() {
   }, []);
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative w-full h-screen overflow-hidden">
-        {/* Image Carousel */}
-        <div className="absolute inset-0">
-          {heroImages.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentImageIndex ? "opacity-100" : "opacity-0"
-              }`}
+    <section className="relative w-full h-screen overflow-hidden bg-foreground">
+      {/* Image Carousel */}
+      <div className="absolute inset-0">
+        {heroImages.map((image, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{
+              opacity: index === currentImageIndex ? 1 : 0,
+              scale: index === currentImageIndex ? 1 : 1.1,
+            }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-cover scale-x-[-1]"
+              priority={index === 0}
+              sizes="100vw"
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Gradient Overlays for better text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-r from-foreground/60 via-foreground/40 to-foreground/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/40" />
+
+      {/* Content - Compact and well-positioned */}
+      <div className="absolute inset-0 flex items-center justify-end">
+        <div className="max-w-xl mx-6 md:mx-12 lg:mx-16 lg:mr-24">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 50 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            className="space-y-6"
+          >
+            {/* Category indicator */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: isLoaded ? 1 : 0, x: isLoaded ? 0 : 30 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="flex items-center space-x-3"
             >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                className="object-cover"
-                priority={index === 0}
-                sizes="100vw"
-              />
-            </div>
-          ))}
-        </div>
+              <div className="w-12 h-[2px] bg-accent rounded-full" />
+              <span className="text-background/90 text-sm font-medium tracking-wider uppercase">
+                Our Journey
+              </span>
+            </motion.div>
 
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/40 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/50" />
+            {/* Main heading - more compact */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-background leading-tight"
+            >
+              Our Story
+            </motion.h1>
 
-        {/* Content */}
-        <div className="h-full w-full justify-end flex items-center">
-          <div className="max-md:mx-auto md:ml-auto px-6 md:px-12 lg:px-16">
-            <div className="max-w-xl">
-              {/* Animated Elements */}
-              <div className="space-y-8">
-                <div
-                  className={`transform transition-all duration-1000 delay-500 ${
-                    isLoaded
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-8 opacity-0"
-                  }`}
+            {/* Description - more concise */}
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="text-lg md:text-xl text-background/90 leading-relaxed max-w-lg"
+            >
+              Built on a vision to support small businesses across India.
+              Discover how we've transformed from an idea to impact.
+            </motion.p>
+
+            {/* Modern CTA Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
+              className="pt-4"
+            >
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-block"
+              >
+                <Button
+                  asChild
+                  size="lg"
+                  className="
+                    relative overflow-hidden
+                    bg-gradient-to-r from-primary to-accent
+                    hover:from-accent hover:to-primary
+                    text-background font-semibold 
+                    px-8 py-6 text-base
+                    rounded-full
+                    shadow-lg shadow-primary/25
+                    hover:shadow-xl hover:shadow-accent/30
+                    border-0
+                    transition-all duration-500
+                    group
+                  "
                 >
-                  <div className="w-16 h-1 bg-white rounded-full mb-6" />
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-8">
-                    Our Story
-                  </h1>
-                </div>
-
-                <div
-                  className={`transform transition-all duration-1000 delay-700 ${
-                    isLoaded
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-8 opacity-0"
-                  }`}
-                >
-                  <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-8 font-light text-justify">
-                    Aye is built on a vision to support small and medium
-                    business in India. We do not want to be merely recognized
-                    for what we have done but also for how we have done it.
-                  </p>
-                </div>
-
-                <div
-                  className={`transform transition-all duration-1000 delay-1000 ${
-                    isLoaded
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-8 opacity-0"
-                  }`}
-                >
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white hover:text-black font-semibold px-8 py-4 text-lg rounded-full transition-all duration-300 hover:scale-105"
+                  <Link
+                    href="/our-story/md-message"
+                    className="inline-flex items-center gap-3 relative z-10"
                   >
-                    <Link
-                      href="/our-story/md-message"
-                      className="inline-flex items-center gap-3"
+                    <span>Read Sanjay Sharma's Message</span>
+                    <motion.div
+                      className="w-5 h-5 rounded-full bg-background/20 backdrop-blur-sm flex items-center justify-center"
+                      whileHover={{ x: 3 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      Read Sanjay Sharma's Message
-                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white">
-                        <svg
-                          className="w-3 h-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </div>
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                      <svg
+                        className="w-3 h-3 text-background"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </motion.div>
 
-        {/* Image Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex space-x-3">
-            {heroImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentImageIndex
-                    ? "bg-white scale-125"
-                    : "bg-white/40 hover:bg-white/60"
-                }`}
-                aria-label={`View image ${index + 1}`}
-              />
-            ))}
-          </div>
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 -top-1 -bottom-1 bg-gradient-to-r from-transparent via-background/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_ease-in-out] transition-opacity duration-500" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Image indicators */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+        transition={{ duration: 0.8, delay: 1.3 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2"
+      >
+        {heroImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentImageIndex(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentImageIndex
+                ? "bg-accent w-8"
+                : "bg-background/40 hover:bg-background/60"
+            }`}
+            aria-label={`View image ${index + 1}`}
+          />
+        ))}
+      </motion.div>
+    </section>
   );
 }

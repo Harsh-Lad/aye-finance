@@ -1,5 +1,7 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 export function ThreeColumnSection() {
@@ -7,152 +9,276 @@ export function ThreeColumnSection() {
     {
       title: "Team",
       description:
-        "Meet the brilliant minds behind AyeFin's innovative financial solutions",
-      image: "/assets/images/about/team.png",
-      alt: "AyeFin team members collaborating in modern office environment",
+        "Meet the brilliant minds behind AyeFin's innovative financial solutions and discover our collaborative culture",
       href: "#",
       cta: "Meet Our Team",
-      gradient: "from-primary/20 via-transparent to-secondary/10",
-      accent: "primary",
+      icon: "👥",
     },
     {
       title: "Fame",
       description:
-        "Discover our achievements and recognition in the fintech industry",
-      image: "/assets/images/about/fame.png",
-      alt: "Awards and recognition trophies showcasing AyeFin's achievements",
+        "Discover our achievements, recognition, and the impact we've made in the fintech industry worldwide",
       href: "#",
       cta: "Explore Our Fame",
-      gradient: "from-accent/20 via-transparent to-primary/10",
-      accent: "accent",
+      icon: "🏆",
     },
     {
       title: "News",
       description:
-        "Stay updated with our latest developments and industry insights",
-      image: "/assets/images/about/news.png",
-      alt: "News and media coverage featuring AyeFin's latest announcements",
+        "Stay updated with our latest developments, industry insights, and breakthrough innovations in finance",
       href: "#",
       cta: "Read Latest News",
-      gradient: "from-secondary/20 via-transparent to-accent/10",
-      accent: "secondary",
+      icon: "📰",
     },
   ];
 
   return (
-    <section className="w-full py-16 md:py-24 lg:py-32 flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-primary/3 to-secondary/5">
-      {/* Container with proper spacing */}
-      <div className="w-full max-w-screen-2xl mx-auto px-4 md:px-8">
-        {/* Cards Grid with better spacing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12 lg:gap-16">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="group relative overflow-hidden transition-all duration-700 hover:z-10 rounded-2xl shadow-2xl"
+    <section className="relative w-full py-16 md:py-20 lg:py-24 bg-secondary overflow-hidden">
+      {/* Decorative Background Elements using CSS variables */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Geometric shapes */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-primary/10 to-accent/5 rounded-full blur-xl" />
+        <div className="absolute bottom-32 right-16 w-40 h-40 bg-gradient-to-tl from-accent/10 to-primary/5 rounded-full blur-xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-primary/3 to-accent/3 rounded-full blur-3xl" />
+
+        {/* Grid pattern */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-5"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <pattern
+              id="grid"
+              width="60"
+              height="60"
+              patternUnits="userSpaceOnUse"
             >
-              <Card className="h-full min-h-[600px] lg:min-h-[700px] border-0 rounded-2xl shadow-none bg-transparent py-0 overflow-hidden">
-                <CardContent className="p-0 h-full">
-                  <div className="relative h-full overflow-hidden rounded-2xl">
-                    {/* Background Image */}
-                    <Image
-                      src={card.image}
-                      alt={card.alt}
-                      fill
-                      className="object-cover transition-all duration-1000 group-hover:scale-110 group-hover:brightness-50"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      priority={index === 0}
-                    />
+              <path
+                d="M 60 0 L 0 0 0 60"
+                fill="none"
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                opacity="0.3"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
 
-                    {/* Gradient Overlays */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent`}
-                    />
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-60`}
-                    />
+      {/* Container */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8">
+        {/* Header */}
+        <motion.header
+          className="text-center mb-12 md:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground mb-4">
+            Discover More
+          </h2>
+          <p className="text-lg md:text-xl text-secondary-foreground/80 max-w-2xl mx-auto">
+            Explore different facets of AyeFin and learn what makes us unique
+          </p>
+        </motion.header>
 
-                    {/* Animated Elements */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <div
-                        className="absolute top-1/4 left-1/4 w-3 h-3 bg-accent rounded-full animate-pulse"
-                        style={{ animationDelay: `${index * 0.2}s` }}
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
+          {cards.map((card, index) => (
+            <motion.article
+              key={index}
+              className="group h-full"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              whileHover={{ y: -8 }}
+            >
+              <Card className="relative h-full min-h-[480px] border-0 bg-card/90 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                {/* Graphical Background using CSS variables */}
+                <div className="absolute inset-0 overflow-hidden rounded-3xl">
+                  {/* Animated background elements */}
+                  <motion.div
+                    className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-primary/15 to-accent/10 rounded-full blur-2xl"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 180, 360],
+                    }}
+                    transition={{
+                      duration: 20,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                  <motion.div
+                    className="absolute -bottom-16 -left-16 w-32 h-32 bg-gradient-to-tr from-accent/10 to-primary/8 rounded-full blur-xl"
+                    animate={{
+                      scale: [1, 0.8, 1],
+                      rotate: [360, 180, 0],
+                    }}
+                    transition={{
+                      duration: 15,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+
+                  {/* Geometric patterns */}
+                  <div className="absolute inset-0 opacity-5">
+                    <svg
+                      className="w-full h-full"
+                      viewBox="0 0 400 400"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <defs>
+                        <linearGradient
+                          id={`grad-${index}`}
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="hsl(var(--primary))" />
+                          <stop offset="100%" stopColor="hsl(var(--accent))" />
+                        </linearGradient>
+                      </defs>
+                      <motion.path
+                        d="M50,200 Q200,50 350,200 Q200,350 50,200"
+                        fill="none"
+                        stroke={`url(#grad-${index})`}
+                        strokeWidth="2"
+                        initial={{ pathLength: 0 }}
+                        whileInView={{ pathLength: 1 }}
+                        transition={{ duration: 2, delay: index * 0.3 }}
                       />
-                      <div
-                        className="absolute bottom-1/3 right-1/4 w-2 h-2 bg-primary rounded-full animate-bounce"
-                        style={{ animationDelay: `${index * 0.3}s` }}
+                      <motion.circle
+                        cx="200"
+                        cy="200"
+                        r="80"
+                        fill="none"
+                        stroke={`url(#grad-${index})`}
+                        strokeWidth="1"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        whileInView={{ pathLength: 1, opacity: 0.3 }}
+                        transition={{ duration: 1.5, delay: index * 0.4 }}
                       />
-                      <div
-                        className="absolute top-2/3 left-1/2 w-1.5 h-1.5 bg-secondary rounded-full animate-pulse"
-                        style={{ animationDelay: `${index * 0.4}s` }}
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="absolute inset-0 p-8 md:p-12 lg:p-16 flex flex-col justify-end text-white">
-                      <div className="flex flex-col items-between transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 space-y-6">
-                        {/* Title Section */}
-                        <div className="space-y-4">
-                          <div
-                            className={`w-16 h-1 bg-${card.accent} rounded-full transition-all duration-500 group-hover:w-24`}
-                          />
-                          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">
-                            {card.title}
-                          </h3>
-                          <div className="w-32 h-0.5 bg-gradient-to-r from-white/50 to-transparent rounded-full" />
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-lg text-white/90 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300 max-w-sm">
-                          {card.description}
-                        </p>
-
-                        {/* CTA Button */}
-                        <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                          <Link
-                            href={card.href}
-                            className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl group/btn"
-                          >
-                            <span className="text-lg">{card.cta}</span>
-                            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300">
-                              <svg
-                                className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 5l7 7-7 7"
-                                />
-                              </svg>
-                            </div>
-                          </Link>
-                        </div>
-                      </div>
-
-                      {/* Hover Effect Border */}
-                      <div className="absolute inset-0 border-4 border-transparent group-hover:border-white/20 transition-all duration-500 pointer-events-none rounded-2xl" />
-                    </div>
-
-                    {/* Number Badge */}
-                    <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
-                      <div
-                        className={`w-12 h-12 rounded-full bg-${card.accent}/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white font-bold text-lg`}
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </div>
-                    </div>
-
-                    {/* Side Accent Line */}
-                    <div
-                      className={`absolute left-0 top-0 bottom-0 w-1 bg-${card.accent} transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom rounded-l-2xl`}
-                    />
+                    </svg>
                   </div>
+                </div>
+
+                <CardContent className="relative p-8 md:p-10 h-full flex flex-col justify-between">
+                  {/* Content */}
+                  <div className="space-y-6">
+                    {/* Icon and Title */}
+                    <header className="space-y-4">
+                      <motion.div
+                        className="text-4xl mb-2"
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {card.icon}
+                      </motion.div>
+                      <div className="space-y-2">
+                        <motion.div
+                          className="w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full"
+                          whileInView={{ width: 60 }}
+                          transition={{ duration: 0.8, delay: index * 0.2 }}
+                        />
+                        <h3 className="text-2xl md:text-3xl font-bold text-card-foreground">
+                          {card.title}
+                        </h3>
+                        <div className="w-20 h-0.5 bg-gradient-to-r from-primary/50 to-accent/50 rounded-full" />
+                      </div>
+                    </header>
+
+                    {/* Description */}
+                    <p className="text-card-foreground/80 text-base leading-relaxed">
+                      {card.description}
+                    </p>
+
+                    {/* Features list */}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3 text-sm text-card-foreground/70">
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <span>Industry leading expertise</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-card-foreground/70">
+                        <div className="w-2 h-2 rounded-full bg-accent" />
+                        <span>Innovative solutions</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-card-foreground/70">
+                        <div className="w-2 h-2 rounded-full bg-secondary" />
+                        <span>Proven track record</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="pt-6">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={card.href}
+                        className="inline-flex items-center gap-3 w-full justify-center bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold px-6 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl group/btn"
+                      >
+                        <span>{card.cta}</span>
+                        <motion.div
+                          className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center"
+                          whileHover={{ x: 4 }}
+                        >
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </motion.div>
+                      </Link>
+                    </motion.div>
+                  </div>
+
+                  {/* Hover Effect Border */}
+                  <motion.div
+                    className="absolute inset-0 border-2 border-transparent group-hover:border-primary/20 rounded-3xl pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+
+                  {/* Number Badge */}
+                  <motion.div
+                    className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.2 + 0.5 }}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+                  </motion.div>
+
+                  {/* Side Accent Line */}
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-accent rounded-l-3xl"
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 + 0.3 }}
+                    style={{ originY: 1 }}
+                  />
                 </CardContent>
               </Card>
-            </div>
+            </motion.article>
           ))}
         </div>
       </div>

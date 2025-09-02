@@ -1,14 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { useRef, useState } from "react";
+import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
+import { useEffect, useRef } from "react";
 
 const timelineData = [
   {
@@ -110,232 +104,154 @@ const timelineData = [
   },
 ];
 
-export function DetailedTimelineSection() {
+export function HorizontalTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
-  const { scrollXProgress } = useScroll({
-    container: containerRef,
-    axis: "x",
-  });
+  const sectionsRef = useRef<HTMLDivElement[]>([]);
 
-  const timelineProgress = useTransform(scrollXProgress, [0, 1], [0, 100]);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  const toggleCardExpansion = (index: number) => {
-    setExpandedCards((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
+    gsap.registerPlugin(Observer);
+
+    const sections = sectionsRef.current;
+    if (!sections.length) return;
+
+    // Create horizontal scroll animation
+    const animation = gsap.to(sections, {
+      xPercent: -100 * (sections.length - 1),
+      ease: "none",
+      paused: true,
     });
-  };
 
-  const getVisibleMilestones = (milestones: string[], isExpanded: boolean) => {
-    const maxVisible = 3; // Show only 3 milestones initially
-    return isExpanded ? milestones : milestones.slice(0, maxVisible);
+    const progressTo = gsap.quickTo(animation, "progress", {
+      duration: 1,
+      ease: "expo",
+    });
+
+    // Create observer for scroll behavior
+    const observer = Observer.create({
+      type: "wheel,touch,pointer",
+      wheelSpeed: -1,
+      onDown: () => {
+        progressTo(Math.max(0, animation.progress() - 0.1));
+      },
+      onUp: () => {
+        progressTo(Math.min(1, animation.progress() + 0.1));
+      },
+      tolerance: 10,
+      preventDefault: true,
+    });
+
+    return () => {
+      observer.kill();
+      animation.kill();
+    };
+  }, []);
+
+  const addToRefs = (el: HTMLDivElement | null) => {
+    if (el && !sectionsRef.current.includes(el)) {
+      sectionsRef.current.push(el);
+    }
   };
 
   return (
-    <section className="py-20 bg-foreground">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+    <div className="timeline-wrapper h-screen overflow-hidden">
+      <div
+        ref={containerRef}
+        className="timeline-container flex h-full"
+        style={{ width: `${(timelineData.length + 1) * 100}%` }}
+      >
+        {/* Introduction Panel */}
+        <div
+          ref={addToRefs}
+          className="panel flex-shrink-0 w-screen h-full flex items-center justify-center bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] text-white relative overflow-hidden"
         >
-          <div className="w-16 h-1 bg-white rounded-full mx-auto mb-6" />
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Our Journey Timeline
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Key milestones and achievements that shaped our path from a startup
-            to a leading NBFC
-          </p>
-        </motion.div>
-
-        {/* Horizontal Scroll Timeline */}
-        <div className="relative">
-          {/* Timeline Container */}
-          <div ref={containerRef} className="overflow-x-auto scrollbar-hide">
-            <div
-              className="flex space-x-8 pb-8"
-              style={{ width: "max-content" }}
-            >
-              {/* Timeline Line */}
-              <div
-                className="absolute top-24 left-0 right-0 h-0.5 bg-gray-700"
-                style={{ width: "100%" }}
-              />
-
-              {timelineData.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  className="relative flex-shrink-0 py-8 w-80"
-                >
-                  {/* Year Badge */}
-                  <div className="relative flex justify-center mb-8">
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      className="px-6 py-3"
-                    >
-                      <Badge
-                        variant="outline"
-                        className="text-white font-bold text-lg"
-                      >
-                        {item.year}
-                      </Badge>
-                    </motion.div>
-                  </div>
-
-                  {/* Content Card */}
-                  <motion.div
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.2 }}
-                    layout
-                  >
-                    <Card className="bg-transparent border-gray-700 hover:border-gray-600 transition-all duration-300 overflow-hidden min-h-[240px] flex flex-col">
-                      <CardContent className="p-6 flex-1 flex flex-col">
-                        <motion.div layout className="space-y-4 flex-1">
-                          {/* Milestones */}
-                          <div className="space-y-3 flex-1">
-                            <AnimatePresence mode="popLayout">
-                              {getVisibleMilestones(
-                                item.milestones,
-                                expandedCards.has(index)
-                              ).map((milestone, milestoneIndex) => (
-                                <motion.div
-                                  key={`${index}-${milestoneIndex}`}
-                                  initial={{ opacity: 0, x: -20, height: 0 }}
-                                  animate={{ opacity: 1, x: 0, height: "auto" }}
-                                  exit={{ opacity: 0, x: -20, height: 0 }}
-                                  transition={{
-                                    duration: 0.4,
-                                    delay: expandedCards.has(index)
-                                      ? milestoneIndex * 0.05
-                                      : 0,
-                                  }}
-                                  layout
-                                  className="flex items-start space-x-3 overflow-hidden"
-                                >
-                                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-white mt-2" />
-                                  <p className="text-gray-300 leading-relaxed text-sm">
-                                    {milestone}
-                                  </p>
-                                </motion.div>
-                              ))}
-                            </AnimatePresence>
-                          </div>
-
-                          {/* Read More/Less Button */}
-                          {item.milestones.length > 3 && (
-                            <motion.div
-                              layout
-                              className="pt-3 mt-auto border-t border-gray-700"
-                            >
-                              <button
-                                onClick={() => toggleCardExpansion(index)}
-                                className="text-white text-sm hover:text-gray-300 transition-colors duration-200 flex items-center space-x-1 group"
-                              >
-                                <span>
-                                  {expandedCards.has(index)
-                                    ? "Show Less"
-                                    : `Show ${item.milestones.length - 3} More`}
-                                </span>
-                                <motion.svg
-                                  animate={{
-                                    rotate: expandedCards.has(index) ? 180 : 0,
-                                  }}
-                                  transition={{ duration: 0.2 }}
-                                  className="w-4 h-4 group-hover:translate-y-0.5 transition-transform"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 9l-7 7-7-7"
-                                  />
-                                </motion.svg>
-                              </button>
-                            </motion.div>
-                          )}
-                        </motion.div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </motion.div>
-              ))}
+          <div className="text-center z-10 max-w-4xl px-8">
+            <h1 className="text-6xl md:text-8xl font-bold mb-8 text-balance">
+              Our Journey
+            </h1>
+            <p className="text-xl md:text-2xl mb-12 text-pretty opacity-90 leading-relaxed">
+              From a single branch in Delhi to becoming a leading NBFC across
+              India. Scroll to explore our decade-long journey of growth,
+              innovation, and impact.
+            </p>
+            <div className="scroll-indicator">
+              <p className="text-lg mb-4">Scroll to explore timeline</p>
+              <div className="w-6 h-10 border-2 border-white rounded-full mx-auto relative">
+                <div className="w-1 h-3 bg-white rounded-full absolute top-2 left-1/2 transform -translate-x-1/2 animate-bounce"></div>
+              </div>
             </div>
           </div>
-
-          {/* Navigation Hint */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="flex items-center justify-center mt-8 text-gray-400"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16l-4-4m0 0l4-4m-4 4h18"
-              />
-            </svg>
-            <span className="text-sm">Drag to navigate timeline</span>
-            <svg
-              className="w-5 h-5 ml-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </motion.div>
+          <div className="absolute inset-0 bg-black/10"></div>
         </div>
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <div className="max-w-2xl mx-auto">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              The Journey Continues...
-            </h3>
-            <p className="text-lg text-gray-300">
-              With over a decade of innovation and growth, we continue to
-              empower micro-entrepreneurs across India, building a more
-              inclusive financial ecosystem.
-            </p>
+        {/* Timeline Panels */}
+        {timelineData.map((yearData, index) => (
+          <div
+            key={yearData.year}
+            ref={addToRefs}
+            className="panel flex-shrink-0 w-screen h-full flex items-center justify-center relative"
+            style={{
+              background:
+                index % 2 === 0
+                  ? "linear-gradient(135deg, var(--background) 0%, #f8fafc 100%)"
+                  : "linear-gradient(135deg, #f1f5f9 0%, var(--background) 100%)",
+            }}
+          >
+            <div className="max-w-6xl mx-auto px-8 py-16">
+              {/* Year Header */}
+              <div className="text-center mb-16">
+                <div className="inline-block">
+                  <h2 className="text-8xl md:text-9xl font-bold text-[#46aee2] mb-4 relative">
+                    {yearData.year}
+                    <div className="absolute -bottom-2 left-0 right-0 h-1 bg-[#5ccf8a] rounded-full"></div>
+                  </h2>
+                  <p className="text-[#0f2740] text-xl font-medium">
+                    Milestones & Achievements
+                  </p>
+                </div>
+              </div>
+
+              {/* Milestones Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {yearData.milestones.map((milestone, milestoneIndex) => (
+                  <div
+                    key={milestoneIndex}
+                    className="milestone-card group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl border border-gray-100 hover:border-[#46aee2]/20"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-8 h-8 bg-[#46aee2] rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300">
+                        {milestoneIndex + 1}
+                      </div>
+                      <p className="text-[#0f2740] leading-relaxed text-pretty group-hover:text-[#214c73] transition-colors duration-300">
+                        {milestone}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Progress Indicator */}
+              <div className="flex justify-center mt-16">
+                <div className="flex gap-2">
+                  {Array.from({ length: timelineData.length + 1 }).map(
+                    (_, i) => (
+                      <div
+                        key={i}
+                        className={`progress-dot w-3 h-3 rounded-full transition-all duration-300 ${
+                          i === index + 1
+                            ? "active bg-[#46aee2] scale-125"
+                            : "bg-gray-300 hover:bg-[#46aee2]/50"
+                        }`}
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        </motion.div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

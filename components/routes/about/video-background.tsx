@@ -1,72 +1,75 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Play, Pause, Volume2, VolumeX } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface VideoBackgroundProps {
-  src: string
-  isPlaying: boolean
-  opacity: number
-  onVideoReady?: () => void
+  src: string;
+  opacity: number;
+  onVideoReady?: () => void;
 }
 
-export function VideoBackground({ src, isPlaying, opacity, onVideoReady }: VideoBackgroundProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [isMuted, setIsMuted] = useState(true)
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+export function VideoBackground({
+  src,
+  opacity,
+  onVideoReady,
+}: VideoBackgroundProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
     const handleLoadedData = () => {
-      onVideoReady?.()
-    }
+      onVideoReady?.();
+    };
 
-    const handlePlay = () => setIsVideoPlaying(true)
-    const handlePause = () => setIsVideoPlaying(false)
+    const handlePlay = () => setIsVideoPlaying(true);
+    const handlePause = () => setIsVideoPlaying(false);
 
-    video.addEventListener("loadeddata", handleLoadedData)
-    video.addEventListener("play", handlePlay)
-    video.addEventListener("pause", handlePause)
+    video.addEventListener("loadeddata", handleLoadedData);
+    video.addEventListener("play", handlePlay);
+    video.addEventListener("pause", handlePause);
 
     return () => {
-      video.removeEventListener("loadeddata", handleLoadedData)
-      video.removeEventListener("play", handlePlay)
-      video.removeEventListener("pause", handlePause)
-    }
-  }, [onVideoReady])
+      video.removeEventListener("loadeddata", handleLoadedData);
+      video.removeEventListener("play", handlePlay);
+      video.removeEventListener("pause", handlePause);
+    };
+  }, [onVideoReady]);
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (isPlaying) {
-      video.play()
+    if (isVideoPlaying) {
+      video.play();
     } else {
-      video.pause()
+      video.pause();
     }
-  }, [isPlaying])
+  }, []);
 
   const togglePlay = () => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
     if (video.paused) {
-      video.play()
+      video.play();
     } else {
-      video.pause()
+      video.pause();
     }
-  }
+  };
 
   const toggleMute = () => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
-    video.muted = !video.muted
-    setIsMuted(video.muted)
-  }
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+  };
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -74,7 +77,7 @@ export function VideoBackground({ src, isPlaying, opacity, onVideoReady }: Video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
         style={{ opacity }}
-        autoPlay={false}
+        autoPlay
         muted
         loop
         playsInline
@@ -83,7 +86,8 @@ export function VideoBackground({ src, isPlaying, opacity, onVideoReady }: Video
         Your browser does not support the video tag.
       </video>
 
-      {/* Video Controls */}
+      {/* Video Controls - only show when overlay is hidden */}
+
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
         <Button
           variant="secondary"
@@ -91,7 +95,11 @@ export function VideoBackground({ src, isPlaying, opacity, onVideoReady }: Video
           className="bg-black/20 backdrop-blur-sm border-white/20 hover:bg-black/30 text-white"
           onClick={togglePlay}
         >
-          {isVideoPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          {isVideoPlaying ? (
+            <Pause className="h-4 w-4" />
+          ) : (
+            <Play className="h-4 w-4" />
+          )}
         </Button>
 
         <Button
@@ -100,9 +108,13 @@ export function VideoBackground({ src, isPlaying, opacity, onVideoReady }: Video
           className="bg-black/20 backdrop-blur-sm border-white/20 hover:bg-black/30 text-white"
           onClick={toggleMute}
         >
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          {isMuted ? (
+            <VolumeX className="h-4 w-4" />
+          ) : (
+            <Volume2 className="h-4 w-4" />
+          )}
         </Button>
       </div>
     </div>
-  )
+  );
 }
